@@ -4,32 +4,39 @@ const http = require('http');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 
-dotenv.config(); // load env variables first
+dotenv.config();
 
-const app = express(); // define app before using it
-const server = http.createServer(app); // creating HTTP server
+const app = express();
+const server = http.createServer(app);
 
-// configuring socket with cors
+// 1. मिडलवेयर और राउट्स (Listen से पहले होने चाहिए)
+app.use(express.json());
+
+// CORS कॉन्फ़िगरेशन (Render के लिए origin: "*" कर दिया है ताकि एरर न आए)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // your frontend url
+    origin: "*", // टेस्टिंग के लिए सभी को अनुमति दें
     methods: ["GET", "POST"],
   },
 });
 
-// 🔌 Socket connection logic
+app.use('/api/users', userRoutes);
+
+app.get('/', (req, res) => {
+  res.send('skill-swapping api running ...');
+});
+
+// 🔌 Socket connection logic (सारा सॉकेट कोड इसी ब्लॉक के अंदर रहेगा)
 io.on("connection", (socket) => {
   console.log(`यूजर जुड़ गया: ${socket.id}`);
 
-  // किसी खास रूम में शामिल होना (Chat ID के आधार पर)
   socket.on("join_room", (data) => {
     socket.join(data);
     console.log(`यूजर ID: ${socket.id} ने रूम ज्वाइन किया: ${data}`);
   });
 
-  // मैसेज भेजने का इवेंट
   socket.on("send_message", (data) => {
-    // रूम में मौजूद दूसरे लोगों को मैसेज भेजें
+    // यहाँ डेटाबेस सेविंग का लॉजिक बाद में जोड़ सकते हैं
     socket.to(data.roomId).emit("receive_message", data);
   });
 
@@ -38,22 +45,8 @@ io.on("connection", (socket) => {
   });
 });
 
-// ✅ ध्यान दें: अब सिर्फ server.listen का उपयोग करें
+// 🚀 सर्वर शुरू करें
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`सर्वर और सॉकेट पोर्ट ${PORT} पर चल रहे हैं`);
-});
-
-// Middleware और Routes
-app.use(express.json());
-app.use('/api/users', userRoutes);
-
-app.get('/', (req, res) => {
-  res.send('skill-swapping api running ...');
-});
-socket.on("send_message",async(data)=>{
-    // अब हम डेटाबेस में सेव करने का काम API के ज़रिए करेंगे, 
-  // लेकिन सॉकेट रीयल-टाइम रेंडरिंग संभालता रहेगा।
-  socket.to(data.roomId).emit("receive_message", data);
-
 });
