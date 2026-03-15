@@ -3,37 +3,35 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        
-        {/* Logo Section */}
-        <Link to="/" className="group flex items-center space-x-2">
-          <div className="bg-blue-600 p-2 rounded-lg group-hover:rotate-12 transition-transform duration-300">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-          </div>
-          <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">
-            SkillSync
-          </span>
-        </Link>
+    <nav style={{
+      background: '#2563eb', 
+      padding: '1rem 2rem', 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center',
+      color: 'white',
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+    }}>
+      <Link to="/" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none' }}>
+        SkillSync
+      </Link>
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
+        <Link to="/discover" style={{ color: 'white', textDecoration: 'none' }}>Discover</Link>
+        <Link to="/login" style={{ 
+          background: 'white', 
+          color: '#2563eb', 
+          padding: '5px 15px', 
+          borderRadius: '5px', 
+          textDecoration: 'none',
+          fontWeight: 'bold' 
+        }}>Login</Link>
+      </div>
+    </nav>
+  );
+};
 
-        {/* Navigation Links */}
-        <div className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="relative text-gray-600 font-medium hover:text-blue-600 transition-colors group">
-            Home
-            <span className="absolute inset-x-0 bottom-[-4px] h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-          </Link>
-          
-          <Link to="/discover" className="relative text-gray-600 font-medium hover:text-blue-600 transition-colors group">
-            Discover
-            <span className="absolute inset-x-0 bottom-[-4px] h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-          </Link>
-
-          {/* Premium Login Button */}
-          <Link 
-            to="/login" 
-            className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full font-bold shadow-lg shadow-blue-200 hover:shadow-xl hover:scale-105 transition-all duration-300 active:scale-95"
+export default Navbar;
           >
             Login
           </Link>
