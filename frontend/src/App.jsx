@@ -7,7 +7,7 @@ import ProfileScreen from './screens/ProfileScreen';
 import DiscoverScreen from './screens/DiscoverScreen';
 import UserDetailScreen from './screens/UserDetailScreen';
 import ChatScreen from "./screens/ChatScreen"; // आपका ChatScreen component
-
+import HomeScreen from "./screens/HomeScreen";
 
 // Simple Home component
 const HomeScreen = () => (
