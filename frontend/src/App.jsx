@@ -9,11 +9,6 @@ import UserDetailScreen from './screens/UserDetailScreen';
 import ChatScreen from "./screens/ChatScreen"; // आपका ChatScreen component
 import HomeScreen from "./screens/HomeScreen";
 
-// Simple Home component
-const HomeScreen = () => (
-  <div className="p-10 text-2xl">होम स्क्रीन पर आपका स्वागत है!</div>
-);
-
 function App() {
   return (
     <Router>
