@@ -2,89 +2,106 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const HomeScreen = () => {
-  // नोट: असल प्रोजेक्ट में आप यहाँ Redux या Context API से 'isLoggedIn' चेक करेंगे
-  const isLoggedIn = true; // इसे टेस्ट करने के लिए true/false करके देखें
+  // नोट: असल प्रोजेक्ट में इसे आप Redux या localStorage से चेक करेंगे
+  // अभी टेस्ट करने के लिए इसे true या false करके देखें
+  const isLoggedIn = false; 
 
   return (
     <div className="min-h-screen bg-white">
       {/* --- Hero Section --- */}
-      <section className="pt-16 pb-12 px-6 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6 tracking-tight">
-            Connect. Learn. <span className="text-blue-600 font-serif italic">Succeed.</span>
+      <section className="relative pt-20 pb-16 px-6 bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-hidden">
+        {/* सजावटी बैकग्राउंड ब्लब्स */}
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-100 rounded-full filter blur-3xl opacity-50"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-indigo-100 rounded-full filter blur-3xl opacity-50"></div>
+
+        <div className="container mx-auto text-center relative z-10">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 mb-6 tracking-tight">
+            SkillSync: <span className="text-blue-600">सीखें और सिखाएं</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
-            SkillSync पर एक्सपर्ट्स से मिलें, अपनी प्रोफाइल बनाएं और रीयल-टाइम चैट के जरिए स्किल्स शेयर करें।
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">
+            भारत का उभरता हुआ स्किल-शेयरिंग प्लेटफॉर्म। अपनी प्रोफाइल बनाएं, मेंटर्स खोजें और रीयल-टाइम चैट के जरिए अपने ज्ञान को बढ़ाएं।
           </p>
 
-          {!isLoggedIn ? (
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Link to="/register" className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl hover:bg-blue-700 transition-all">
-                Get Started Free
+          <div className="flex flex-col sm:flex-row justify-center gap-5">
+            {!isLoggedIn ? (
+              <>
+                <Link to="/register" className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-2xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300">
+                  Join SkillSync Now
+                </Link>
+                <Link to="/login" className="px-10 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-bold hover:border-blue-600 hover:text-blue-600 hover:-translate-y-1 transition-all duration-300">
+                  Member Login
+                </Link>
+              </>
+            ) : (
+              <Link to="/discover" className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl hover:bg-blue-700 transition-all">
+                Go to Dashboard
               </Link>
-              <Link to="/login" className="px-10 py-4 bg-white border-2 border-gray-200 text-gray-700 rounded-2xl font-bold hover:border-blue-600 hover:text-blue-600 transition-all">
-                Login to Account
-              </Link>
-            </div>
-          ) : (
-            <div className="inline-flex items-center p-1 bg-gray-100 rounded-2xl">
-              <span className="px-4 py-2 text-sm font-medium text-gray-500">Welcome back, User! 👋</span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </section>
 
-      {/* --- Navigation Grid (The Functional Heart) --- */}
-      <section className="py-16 px-6 container mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-8 flex items-center gap-2">
-          <span className="w-2 h-8 bg-blue-600 rounded-full"></span>
-          Quick Access Dashboard
-        </h2>
+      {/* --- Main Navigation Grid --- */}
+      <section className="py-20 px-6 container mx-auto">
+        <div className="flex items-center justify-between mb-12">
+          <h2 className="text-3xl font-bold text-gray-800 tracking-tight">
+            Quick Actions
+          </h2>
+          <div className="h-1 flex-grow ml-6 bg-gray-100 rounded-full"></div>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* Discover Screen Link */}
-          <Link to="/discover" className="group p-6 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-blue-100 hover:shadow-2xl transition-all border-b-4 border-b-blue-500">
-            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🔍</div>
-            <h3 className="text-xl font-bold text-gray-800">Discover Skills</h3>
-            <p className="text-gray-500 text-sm mt-2">नए मेंटर्स और स्किल्स को खोजें और उनसे जुड़ें।</p>
-          </Link>
-
-          {/* Profile Screen Link */}
-          <Link to="/profile" className="group p-6 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-indigo-100 hover:shadow-2xl transition-all border-b-4 border-b-indigo-500">
-            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">👤</div>
-            <h3 className="text-xl font-bold text-gray-800">My Profile</h3>
-            <p className="text-gray-500 text-sm mt-2">अपनी स्किल्स को अपडेट करें और पोर्टफोलियो मैनेज करें।</p>
-          </Link>
-
-          {/* Chat Screen Link */}
-          <Link to="/chat/main-room" className="group p-6 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-green-100 hover:shadow-2xl transition-all border-b-4 border-b-green-500">
-            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💬</div>
-            <h3 className="text-xl font-bold text-gray-800">Messages</h3>
-            <p className="text-gray-500 text-sm mt-2">अपने कनेक्शन के साथ रीयल-टाइम चैट करें।</p>
-          </Link>
-
-          {/* User Detail (Mock) */}
-          <Link to="/user/123" className="group p-6 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-orange-100 hover:shadow-2xl transition-all border-b-4 border-b-orange-500">
-            <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🌟</div>
-            <h3 className="text-xl font-bold text-gray-800">Top Mentor</h3>
-            <p className="text-gray-500 text-sm mt-2">महीने के सबसे बेहतरीन मेंटर की प्रोफाइल देखें।</p>
-          </Link>
-
-          {/* Registration (Only if not logged in) */}
+          {/* 1. Register Card (Highlighted for New Users) */}
           {!isLoggedIn && (
-            <Link to="/register" className="group p-6 bg-blue-600 rounded-3xl shadow-xl hover:bg-blue-700 transition-all flex flex-col justify-center items-center text-white text-center">
-              <h3 className="text-xl font-bold">New Here?</h3>
-              <p className="text-blue-100 text-sm mt-2">आज ही अकाउंट बनाएं और सीखना शुरू करें!</p>
-              <span className="mt-4 bg-white text-blue-600 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Register</span>
+            <Link to="/register" className="group p-8 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] shadow-2xl hover:scale-[1.02] transition-all relative overflow-hidden text-white">
+              <div className="absolute top-0 right-0 p-4 opacity-20 group-hover:rotate-12 transition-transform">
+                <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 20 20"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" /></svg>
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Create Account</h3>
+              <p className="text-blue-100 mb-6">आज ही हमसे जुड़ें और अपनी पहली स्किल शेयर करना शुरू करें।</p>
+              <span className="bg-white text-blue-600 px-6 py-2 rounded-full font-extrabold text-sm uppercase">Register Now</span>
             </Link>
           )}
+
+          {/* 2. Discover Card */}
+          <Link to="/discover" className="group p-8 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:shadow-blue-100 transition-all border-b-8 border-b-blue-500">
+            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition-transform">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-800">Discover</h3>
+            <p className="text-gray-500 mt-2 italic">नए मेंटर्स और स्किल्स को एक्सप्लोर करें।</p>
+          </Link>
+
+          {/* 3. Profile Card */}
+          <Link to="/profile" className="group p-8 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:shadow-indigo-100 transition-all border-b-8 border-b-indigo-500">
+            <div className="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition-transform">👤</div>
+            <h3 className="text-2xl font-bold text-gray-800">My Profile</h3>
+            <p className="text-gray-500 mt-2 italic">अपनी जानकारी और स्किल्स को मैनेज करें।</p>
+          </Link>
+
+          {/* 4. Chat Card */}
+          <Link to="/chat/general" className="group p-8 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-green-100 transition-all border-b-8 border-b-green-500">
+            <div className="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition-transform">💬</div>
+            <h3 className="text-2xl font-bold text-gray-800">Chat Room</h3>
+            <p className="text-gray-500 mt-2 italic">रीयल-टाइम में दूसरों से बात करें।</p>
+          </Link>
+
+          {/* 5. Login Card (If not logged in) */}
+          {!isLoggedIn && (
+            <Link to="/login" className="group p-8 bg-white border border-gray-100 rounded-[2.5rem] shadow-sm hover:shadow-gray-200 transition-all border-b-8 border-b-gray-800">
+              <div className="w-16 h-16 bg-gray-100 text-gray-800 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:scale-110 transition-transform">🔑</div>
+              <h3 className="text-2xl font-bold text-gray-800">Login</h3>
+              <p className="text-gray-500 mt-2 italic">अपने अकाउंट में वापस आएं।</p>
+            </Link>
+          )}
+
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="mt-12 py-8 bg-gray-50 text-center">
-        <p className="text-gray-400 text-sm">© 2026 SkillSync • Designed for Excellence</p>
+      {/* Footer (SSP Mishra Credit) */}
+      <footer className="py-12 bg-gray-50 text-center border-t border-gray-100">
+        <p className="text-gray-500 font-medium">
+          © {new Date().getFullYear()} SkillSync • All rights reserved to <span className="text-blue-600 font-bold">SSP Mishra</span>
+        </p>
       </footer>
     </div>
   );
