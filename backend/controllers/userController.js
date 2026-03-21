@@ -5,22 +5,27 @@ const generateToken = require('../utils/generateToken');
 
 // @desc    Register a new user
 // @route   POST /api/users
+// @access  Public
 const registerUser = asyncHandler(async (req, res) => {
     // 1. डेटा प्राप्त करें
     const { name, email, password } = req.body;
 
     // 2. चेक करें कि डेटा आ रहा है या नहीं
     if (!name || !email || !password) {
-        res.status(400);
-        throw new Error("Missing Fields: नाम, ईमेल और पासवर्ड अनिवार्य हैं।");
+        return res.status(400).json({
+      success: false,
+        message: "Missing Fields: नाम, ईमेल और पासवर्ड अनिवार्य हैं।"
+    });
     }
-
     // 3. चेक करें कि यूजर पहले से मौजूद है या नहीं
-    const userExist = await User.findOne({ email });
-    if (userExist) {
-        res.status(400);
-        throw new Error("User already exists: यह ईमेल पहले से पंजीकृत है।");
-    }
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+    return res.status(400).json({
+      success: false,
+      message: "User already exists: यह ईमेल पहले से पंजीकृत है।"
+    });
+  }
+
 
     // 4. पासवर्ड को सुरक्षित तरीके से हैश करें
     const salt = await bcrypt.genSalt(10);
