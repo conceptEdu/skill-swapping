@@ -17,9 +17,30 @@ app.use(express.json());
 // CORS + Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:5173", // ✅ URL में trailing slash हटाएँ
     methods: ["GET", "POST"],
   },
+});
+
+// 🔌 Socket connection logic (सिर्फ एक बार लिखें)
+io.on("connection", (socket) => {
+  console.log(`यूजर जुड़ गया: ${socket.id}`);
+
+  // किसी खास रूम में शामिल होना (Chat ID के आधार पर)
+  socket.on("join_room", (roomId) => {
+    socket.join(roomId);
+    console.log(`यूजर ID: ${socket.id} ने रूम ज्वाइन किया: ${roomId}`);
+  });
+
+  // मैसेज भेजने का इवेंट
+  socket.on("send_message", (data) => {
+    // रूम में मौजूद दूसरे लोगों को मैसेज भेजें
+    socket.to(data.roomId).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("यूजर डिस्कनेक्ट हो गया", socket.id);
+  });
 });
 
 // Routes
@@ -27,24 +48,6 @@ app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('skill-swapping api running ...');
-});
-
-// 🔌 Socket connection logic
-io.on("connection", (socket) => {
-  console.log(`यूजर जुड़ गया: ${socket.id}`);
-
-  socket.on("join_room", (data) => {
-    socket.join(data);
-    console.log(`यूजर ID: ${socket.id} ने रूम ज्वाइन किया: ${data}`);
-  });
-
-  socket.on("send_message", (data) => {
-    socket.to(data.roomId).emit("receive_message", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("यूजर डिस्कनेक्ट हो गया", socket.id);
-  });
 });
 
 // ✅ Error handler middleware (सभी routes के बाद लगाएँ)
@@ -65,3 +68,8 @@ mongoose
     console.error('MongoDB कनेक्शन फेल ❌', err.message);
     process.exit(1);
   });
+  socket.on("send_message", async (data) => {
+  // अब हम डेटाबेस में सेव करने का काम API के ज़रिए करेंगे, 
+  // लेकिन सॉकेट रीयल-टाइम रेंडरिंग संभालता रहेगा।
+  socket.to(data.roomId).emit("receive_message", data);
+});

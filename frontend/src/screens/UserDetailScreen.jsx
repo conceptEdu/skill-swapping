@@ -11,18 +11,12 @@ const UserDetailScreen = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const config = { headers: { Authorization: `Bearer ${userInfo.token}` } }; // ✅ सही किया
-        const { data } = await axios.get(`/api/users/${id}`, config); // ✅ सही किया
-        setUser(data);
-      } catch (err) {
-        console.error(err.response?.data?.message || 'User fetch failed');
-      }
+      const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
+      const { data } = await axios.get(`/api/users/${id}`, config);
+      setUser(data);
     };
-    if (userInfo) {
-      fetchUser();
-    }
-  }, [id, userInfo]);
+    fetchUser();
+  }, [id, userInfo.token]);
 
   if (!user) return <div className="p-10 text-center">लोड हो रहा है...</div>;
 
@@ -31,15 +25,11 @@ const UserDetailScreen = () => {
       <div className="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
         {/* बायां हिस्सा: फोटो और बेसिक जानकारी */}
         <div className="md:w-1/3 bg-blue-600 p-8 text-white flex flex-col items-center">
-          <img
-            src={user.pic || '/default-avatar.png'} // ✅ fallback image
-            alt={user.name}
-            className="w-40 h-40 rounded-full border-4 border-white shadow-lg mb-4"
-          />
+          <img src={user.pic} alt={user.name} className="w-40 h-40 rounded-full border-4 border-white shadow-lg mb-4" />
           <h1 className="text-2xl font-bold">{user.name}</h1>
           <p className="opacity-80">{user.city || 'शहर की जानकारी नहीं'}</p>
-          <button
-            onClick={() => navigate(`/chat/${user._id}`)} // ✅ सही किया
+          <button 
+            onClick={() => navigate(`/chat/${user._id}`)}
             className="mt-6 bg-white text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition shadow-md"
           >
             मैसेज भेजें
@@ -49,21 +39,14 @@ const UserDetailScreen = () => {
         {/* दायां हिस्सा: स्किल्स और बायो */}
         <div className="md:w-2/3 p-8">
           <h2 className="text-xl font-bold text-gray-800 mb-2">मेरे बारे में</h2>
-          <p className="text-gray-600 mb-8">
-            {user.bio || 'इस यूजर ने अभी कोई बायो नहीं लिखा है।'}
-          </p>
+          <p className="text-gray-600 mb-8">{user.bio || 'इस यूजर ने अभी कोई बायो नहीं लिखा है।'}</p>
 
           <div className="space-y-6">
             <div>
-              <h3 className="text-sm font-semibold text-green-600 uppercase">
-                विशेषज्ञता (Teaching Skills)
-              </h3>
+              <h3 className="text-sm font-semibold text-green-600 uppercase">विशेषज्ञता (Teaching Skills)</h3>
               <div className="flex flex-wrap gap-2 mt-2">
-                {user.teachSkills?.map((s, i) => (
-                  <span
-                    key={i}
-                    className="bg-green-100 text-green-800 px-4 py-1 rounded-lg text-sm border border-green-200"
-                  >
+                {user.teachSkills.map((s, i) => (
+                  <span key={i} className="bg-green-100 text-green-800 px-4 py-1 rounded-lg text-sm border border-green-200">
                     {s.skillName}
                   </span>
                 ))}
@@ -71,15 +54,10 @@ const UserDetailScreen = () => {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-blue-600 uppercase">
-                सीखने की इच्छा (Learning Skills)
-              </h3>
+              <h3 className="text-sm font-semibold text-blue-600 uppercase">सीखने की इच्छा (Learning Skills)</h3>
               <div className="flex flex-wrap gap-2 mt-2">
-                {user.learnSkills?.map((s, i) => (
-                  <span
-                    key={i}
-                    className="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-sm border border-blue-200"
-                  >
+                {user.learnSkills.map((s, i) => (
+                  <span key={i} className="bg-blue-100 text-blue-800 px-4 py-1 rounded-lg text-sm border border-blue-200">
                     {s.skillName}
                   </span>
                 ))}
