@@ -8,19 +8,13 @@ const DiscoverScreen = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      try {
-        const config = {
-          headers: { Authorization: `Bearer ${userInfo.token}` }, // ✅ सही किया
-        };
-        const { data } = await axios.get('/api/users', config);
-        setUsers(data);
-      } catch (err) {
-        console.error(err.response?.data?.message || 'Users fetch failed');
-      }
+      const config = {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      };
+      const { data } = await axios.get('/api/users', config);
+      setUsers(data);
     };
-    if (userInfo) {
-      fetchUsers();
-    }
+    fetchUsers();
   }, [userInfo]);
 
   return (
@@ -29,16 +23,9 @@ const DiscoverScreen = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {users.map((user) => (
-          <div
-            key={user._id}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-blue-500"
-          >
+          <div key={user._id} className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition border-t-4 border-blue-500">
             <div className="flex items-center mb-4">
-              <img
-                src={user.pic || '/default-avatar.png'} // ✅ fallback image
-                alt={user.name}
-                className="w-16 h-16 rounded-full border"
-              />
+              <img src={user.pic} alt={user.name} className="w-16 h-16 rounded-full border" />
               <div className="ml-4">
                 <h2 className="text-xl font-bold">{user.name}</h2>
                 <p className="text-gray-500 text-sm">{user.city || 'Location N/A'}</p>
@@ -48,11 +35,8 @@ const DiscoverScreen = () => {
             <div className="mb-4">
               <h3 className="font-semibold text-green-600 uppercase text-xs tracking-wider">सिखा सकते हैं:</h3>
               <div className="flex flex-wrap gap-2 mt-1">
-                {user.teachSkills?.map((s, i) => (
-                  <span
-                    key={i}
-                    className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium"
-                  >
+                {user.teachSkills.map((s, i) => (
+                  <span key={i} className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
                     {s.skillName}
                   </span>
                 ))}

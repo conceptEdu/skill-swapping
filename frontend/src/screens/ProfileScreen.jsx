@@ -27,17 +27,17 @@ const ProfileScreen = () => {
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.token}`, // ✅ backticks का सही इस्तेमाल
+          Authorization: `Bearer ${userInfo.token}`, // सुरक्षा के लिए टोकन भेजें
         },
       };
 
       const { data } = await axios.put(
         '/api/users/profile',
-        {
-          name,
-          bio,
-          teachSkills: [{ skillName: teachSkill }],
-          learnSkills: [{ skillName: learnSkill }],
+        { 
+          name, 
+          bio, 
+          teachSkills: [{ skillName: teachSkill }], 
+          learnSkills: [{ skillName: learnSkill }] 
         },
         config
       );
@@ -95,10 +95,7 @@ const ProfileScreen = () => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded font-bold hover:bg-blue-700 transition"
-        >
+        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded font-bold">
           प्रोफाइल सेव करें
         </button>
       </form>

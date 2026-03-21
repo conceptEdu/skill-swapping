@@ -73,32 +73,39 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Profile, GetUsers, GetUserById (पुराने कोड की तरह ही रहेंगे)
+// @desc    Update user profile
+// @route   PUT /api/users/profile
 const updateUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    if (user) {
-        user.name = req.body.name || user.name;
-        user.bio = req.body.bio || user.bio;
-        if (req.body.password) {
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(req.body.password, salt);
-        }
-        const updatedUser = await user.save();
-        res.json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-            token: generateToken(updatedUser._id),
-        });
-    } else {
-        res.status(404);
-        throw new Error('User not found');
-    }
-});
+  const user = await User.findById(req.user._id);
 
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.bio = req.body.bio || user.bio;
+    if (req.body.teachSkills) user.teachSkills = req.body.teachSkills;
+    if (req.body.learnSkills) user.learnSkills = req.body.learnSkills;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      bio: updatedUser.bio,
+      teachSkills: updatedUser.teachSkills,
+      learnSkills: updatedUser.learnSkills,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error('यूजर नहीं मिला');
+  }
+});
+// @desc    Get all users for discovery
+// @route   GET /api/users
 const getUsers = asyncHandler(async (req, res) => {
-    const users = await User.find({ _id: { $ne: req.user._id } }).select('-password');
-    res.json(users);
+  // खुद को छोड़कर बाकी सभी यूजर्स को ढूंढें
+  const users = await User.find({ _id: { $ne: req.user._id } }).select('-password');
+  res.json(users);
 });
 
 const getUserById = asyncHandler(async (req, res) => {
