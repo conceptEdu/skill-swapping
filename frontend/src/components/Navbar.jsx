@@ -3,29 +3,21 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav style={{
-      background: '#2563eb', 
-      padding: '1rem 2rem', 
-      display: 'flex', 
-      justifyContent: 'space-between', 
-      alignItems: 'center',
-      color: 'white',
-      boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-    }}>
-      <Link to="/" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none' }}>
-        SkillSync
-      </Link>
-      <div style={{ display: 'flex', gap: '20px' }}>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
-        <Link to="/discover" style={{ color: 'white', textDecoration: 'none' }}>Discover</Link>
-        <Link to="/login" style={{ 
-          background: 'white', 
-          color: '#2563eb', 
-          padding: '5px 15px', 
-          borderRadius: '5px', 
-          textDecoration: 'none',
-          fontWeight: 'bold' 
-        }}>Login</Link>
+    <nav className="bg-blue-600 p-4 text-white shadow-lg">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold tracking-tight">
+          SkillSync
+        </Link>
+
+        {/* Links */}
+        <div className="space-x-6">
+          <Link to="/" className="hover:text-blue-200 transition">Home</Link>
+          <Link to="/discover" className="hover:text-blue-200 transition">Discover</Link>
+          <Link to="/login" className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
+            Login
+          </Link>
+        </div>
       </div>
     </nav>
   );

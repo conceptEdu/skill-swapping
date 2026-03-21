@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 // अगर लोकल स्टोरेज में पहले से यूजर है, तो उसे उठा लें
 const initialState = {
-  userInfo: localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
+  userInfo: localStorage.getItem('userInfo') 
+    ? JSON.parse(localStorage.getItem('userInfo')) 
     : null,
 };
 

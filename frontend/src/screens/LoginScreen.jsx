@@ -11,10 +11,9 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux स्टोर से यूजर की जानकारी लें
   const { userInfo } = useSelector((state) => state.auth);
 
-  // यदि यूजर पहले से लॉगिन है, तो उसे होम पेज पर भेजें
+  // अगर यूजर पहले से लॉगिन है, तो उसे होम पेज पर भेजें
   useEffect(() => {
     if (userInfo) {
       navigate('/');
@@ -24,63 +23,47 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      // बैकएंड API को कॉल करें (सुनिश्चित करें कि आपका Proxy या Base URL सेट है)
+      // बैकएंड API को कॉल करें
       const { data } = await axios.post('/api/users/login', { email, password });
       
       // Redux स्टोर और LocalStorage में डेटा सेव करें
       dispatch(setCredentials({ ...data }));
       navigate('/');
     } catch (err) {
-      // एरर मैसेज को बेहतर तरीके से दिखाएं
-      alert(err.response?.data?.message || 'लॉगिन विफल रहा। कृपया पुनः प्रयास करें।');
+      alert(err.response?.data?.message || 'लॉगिन विफल रहा');
     }
   };
 
   return (
-    // 'min-h-screen' का उपयोग करें ताकि बैकग्राउंड पूरी स्क्रीन कवर करे
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <form 
-        onSubmit={submitHandler} 
-        className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md border border-gray-100"
-      >
-        <h2 className="text-4xl font-extrabold mb-8 text-center text-blue-600 tracking-tight">
-          लॉगिन करें
-        </h2>
+    <div className="flex justify-center items-center h-[80vh]">
+      <form onSubmit={submitHandler} className="bg-white p-8 rounded-2xl shadow-xl w-96 border border-gray-100">
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">लॉगिन करें</h2>
         
-        <div className="mb-5">
-          <label className="block text-gray-600 font-semibold mb-2 ml-1">ईमेल</label>
+        <div className="mb-4">
+          <label className="block text-gray-700 font-medium mb-2">ईमेल</label>
           <input
             type="email"
-            required
-            placeholder="अपना ईमेल यहाँ लिखें"
-            className="w-full p-4 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+            placeholder="अपना ईमेल डालें"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
-        <div className="mb-8">
-          <label className="block text-gray-600 font-semibold mb-2 ml-1">पासवर्ड</label>
+        <div className="mb-6">
+          <label className="block text-gray-700 font-medium mb-2">पासवर्ड</label>
           <input
             type="password"
-            required
-            placeholder="अपना पासवर्ड दर्ज करें"
-            className="w-full p-4 border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all"
+            placeholder="अपना पासवर्ड डालें"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
-        <button 
-          type="submit" 
-          className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-200"
-        >
+        <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
           Sign In
         </button>
-
-        <p className="mt-6 text-center text-gray-500 text-sm">
-          खाता नहीं है? <span className="text-blue-600 cursor-pointer hover:underline">रजिस्टर करें</span>
-        </p>
       </form>
     </div>
   );
