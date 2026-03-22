@@ -15,7 +15,16 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/users/login', { email, password });
+      // ✅ Render backend URL from .env
+      const baseURL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+      if (!baseURL) {
+        alert("Frontend .env में VITE_API_URL missing है");
+        return;
+      }
+
+      const endpoint = `${baseURL}/api/users/login`;
+
+      const { data } = await axios.post(endpoint, { email, password });
       dispatch(setCredentials({ ...data }));
 
       // ✅ Success message दिखाओ

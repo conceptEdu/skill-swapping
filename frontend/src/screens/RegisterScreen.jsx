@@ -23,6 +23,7 @@ const RegisterScreen = () => {
     }
 
     try {
+      // ✅ Render backend URL from .env
       const baseURL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
       if (!baseURL) {
         alert("Frontend .env में VITE_API_URL missing है");
@@ -30,8 +31,8 @@ const RegisterScreen = () => {
       }
 
       const endpoint = `${baseURL}/api/users/register`;
-      const { data } = await axios.post(endpoint, { name, email, password });
 
+      const { data } = await axios.post(endpoint, { name, email, password });
       dispatch(setCredentials({ ...data }));
 
       // ✅ Success message दिखाओ

@@ -17,8 +17,8 @@ app.use(express.json());
 
 // ✅ CORS middleware (routes से पहले लगाएँ)
 app.use(cors({
-  origin: "https://skill-swapping.vercel.app/
-",   // vercel par
+  origin: process.env.CLIENT_URL, // Vercel domain
+
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
