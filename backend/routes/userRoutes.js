@@ -10,7 +10,10 @@ const {
 const { protect } = require('../middleware/authMiddleware');
 
 // Register
-router.post('/', registerUser);
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  // ... user create logic
+});
 
 // Login
 router.post('/login', authUser);   // ✅ यहाँ भी authUser

@@ -12,30 +12,48 @@ const RegisterScreen = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (userInfo) {
+      console.log("✅ Already logged in, redirecting...");
       navigate('/');
     }
   }, [navigate, userInfo]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    
-    // पासवर्ड मैचिंग चेक करें
+    console.log("➡️ Step 1: Form submitted", { name, email, password, confirmPassword });
+
     if (password !== confirmPassword) {
-      alert('पासवर्ड मैच नहीं हो रहे हैं');
+      console.error("❌ Step 2: Passwords do not match");
+      alert("पासवर्ड मैच नहीं हो रहे हैं");
       return;
     }
 
     try {
-      const { data } = await axios.post('/api/users', { name, email, password });
+      const baseURL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+      if (!baseURL) {
+        console.error("❌ Step 3: VITE_API_URL missing");
+        alert("Frontend .env में VITE_API_URL missing है");
+        return;
+      }
+      console.log("✅ Step 3: Base URL =", baseURL);
+
+      const endpoint = `${baseURL}/api/users/register`;
+      console.log("➡️ Step 4: Sending request to", endpoint);
+
+      const { data } = await axios.post(endpoint, { name, email, password });
+      console.log("✅ Step 5: Response received", data);
+
       dispatch(setCredentials({ ...data }));
+      console.log("✅ Step 6: Credentials saved in Redux");
+
       navigate('/');
+      console.log("✅ Step 7: Redirected to home");
     } catch (err) {
-      alert(err.response?.data?.message || 'रजिस्ट्रेशन विफल रहा');
+      console.error("❌ Step 4 Error:", err.response?.status, err.response?.data || err.message);
+      alert(`Error: ${err.response?.data?.message || err.message}`);
     }
   };
 
@@ -43,53 +61,25 @@ const RegisterScreen = () => {
     <div className="flex justify-center items-center min-h-[90vh]">
       <form onSubmit={submitHandler} className="bg-white p-8 rounded-2xl shadow-xl w-96 border border-gray-100">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">अकाउंट बनाएं</h2>
-        
+
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">नाम</label>
-          <input
-            type="text"
-            placeholder="अपना पूरा नाम लिखें"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
         </div>
 
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">ईमेल</label>
-          <input
-            type="email"
-            placeholder="अपना ईमेल डालें"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
 
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">पासवर्ड</label>
-          <input
-            type="password"
-            placeholder="पासवर्ड चुनें"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
 
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-1">पासवर्ड की पुष्टि करें</label>
-          <input
-            type="password"
-            placeholder="दोबारा पासवर्ड लिखें"
-            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
         </div>
 
         <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">
