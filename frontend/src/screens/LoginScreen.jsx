@@ -1,69 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setCredentials } from '../slices/authSlice';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth);
-
-  // अगर यूजर पहले से लॉगिन है, तो उसे होम पेज पर भेजें
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/');
-    }
-  }, [navigate, userInfo]);
-
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      // बैकएंड API को कॉल करें
       const { data } = await axios.post('/api/users/login', { email, password });
-      
-      // Redux स्टोर और LocalStorage में डेटा सेव करें
       dispatch(setCredentials({ ...data }));
-      navigate('/');
+
+      // ✅ Success message दिखाओ
+      setSuccessMessage("🎉 लॉगिन सफल हुआ! Discover पेज पर जा रहे हैं...");
+
+      // ✅ 2 सेकंड बाद DiscoverScreen पर redirect
+      setTimeout(() => {
+        navigate('/discover');
+      }, 2000);
     } catch (err) {
       alert(err.response?.data?.message || 'लॉगिन विफल रहा');
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-[80vh]">
-      <form onSubmit={submitHandler} className="bg-white p-8 rounded-2xl shadow-xl w-96 border border-gray-100">
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">लॉगिन करें</h2>
-        
+    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+      <form
+        onSubmit={submitHandler}
+        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100"
+      >
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
+          लॉगिन करें
+        </h2>
+
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-center font-medium">
+            {successMessage}
+          </div>
+        )}
+
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">ईमेल</label>
           <input
             type="email"
-            placeholder="अपना ईमेल डालें"
+            placeholder="ईमेल"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-2">पासवर्ड</label>
           <input
             type="password"
-            placeholder="अपना पासवर्ड डालें"
+            placeholder="पासवर्ड"
             className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 
-        <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition duration-300">
-          Sign In
-        </button>
+        {/* ✅ Buttons in two columns */}
+        <div className="grid grid-cols-2 gap-4 mt-6">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/register')}
+            className="bg-gray-200 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-300 transition"
+          >
+            Register
+          </button>
+        </div>
+
+        <p className="mt-4 text-center text-gray-600">
+          पासवर्ड भूल गए?{" "}
+          <Link to="/forgot" className="text-blue-600 hover:underline">
+            Reset करें
+          </Link>
+        </p>
       </form>
     </div>
   );
