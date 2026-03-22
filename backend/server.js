@@ -15,10 +15,9 @@ const server = http.createServer(app);
 // ✅ Middleware
 app.use(express.json());
 
-// ✅ CORS middleware (routes से पहले लगाएँ)
+// ✅ CORS middleware (for REST API)
 app.use(cors({
-  origin: process.env.CLIENT_URL, // Vercel domain
-
+  origin: process.env.CLIENT_URL, // e.g. https://skill-swapping.vercel.app
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -26,17 +25,17 @@ app.use(cors({
 // ✅ Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL, // use same env variable
     methods: ["GET", "POST"]
   }
 });
 
 io.on("connection", (socket) => {
-  console.log(`✅ यूजर जुड़ गया: ${socket.id}`);
+  console.log(`✅ User connected: ${socket.id}`);
 
   socket.on("join_room", (roomId) => {
     socket.join(roomId);
-    console.log(`यूजर ID: ${socket.id} ने रूम ज्वाइन किया: ${roomId}`);
+    console.log(`User ${socket.id} joined room: ${roomId}`);
   });
 
   socket.on("send_message", (data) => {
@@ -45,7 +44,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("❌ यूजर डिस्कनेक्ट हो गया", socket.id);
+    console.log("❌ User disconnected", socket.id);
   });
 });
 
@@ -53,7 +52,7 @@ io.on("connection", (socket) => {
 app.use('/api/users', userRoutes);
 
 app.get('/', (req, res) => {
-  res.send('skill-swapping api running ...');
+  res.send('skill-swapping API running ...');
 });
 
 // ✅ Error handler middleware
