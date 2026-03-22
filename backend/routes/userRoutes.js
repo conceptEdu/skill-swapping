@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   registerUser,
-  authUser,          // ✅ loginUser की जगह authUser
+  authUser,          // loginUser की जगह authUser
   updateUserProfile,
   getUsers,
   getUserById,
@@ -10,13 +10,10 @@ const {
 const { protect } = require('../middleware/authMiddleware');
 
 // Register
-router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  // ... user create logic
-});
+router.post('/register', registerUser);   // ❌ async function हटाकर controller लगाया
 
 // Login
-router.post('/login', authUser);   // ✅ यहाँ भी authUser
+router.post('/login', authUser);          // सही है
 
 // Profile Update
 router.put('/profile', protect, updateUserProfile);
