@@ -51,6 +51,11 @@ io.on("connection", (socket) => {
 // ✅ Routes
 app.use('/api/users', userRoutes);
 
+// ✅ Test route for CORS check
+app.get("/test-cors", (req, res) => {
+  res.json({ message: "CORS working" });
+});
+
 app.get('/', (req, res) => {
   res.send('skill-swapping API running ...');
 });
