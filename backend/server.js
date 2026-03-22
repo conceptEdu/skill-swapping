@@ -17,7 +17,8 @@ app.use(express.json());
 
 // ✅ CORS middleware (routes से पहले लगाएँ)
 app.use(cors({
-  origin: "http://localhost:5173",   // लोकल React dev server
+  origin: "https://skill-swapping.vercel.app/
+",   // vercel par
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
